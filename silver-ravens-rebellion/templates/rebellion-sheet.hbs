@@ -1,0 +1,48 @@
+<form class="srr-form {{#unless editable}}is-readonly{{/unless}}">
+  <header class="srr-hero">
+    <div class="srr-mark"><i class="fas fa-feather-pointed"></i></div>
+    <div class="srr-title">
+      <input name="name" value="{{rebellion.name}}" {{readOnly}}>
+      <input name="subtitle" value="{{rebellion.subtitle}}" {{readOnly}}>
+    </div>
+    <div class="srr-rank"><label>RANK</label><input type="number" name="rank" value="{{rebellion.rank}}" min="1" max="20" {{readOnly}}></div>
+  </header>
+
+  {{#unless editable}}<div class="srr-notice"><i class="fas fa-eye"></i> Player View</div>{{/unless}}
+
+  <section class="srr-grid srr-summary">
+    <label>XP <span><input type="number" name="xp" value="{{rebellion.xp}}" {{readOnly}}> / <input type="number" name="xpNext" value="{{rebellion.xpNext}}" {{readOnly}}></span></label>
+    <label>Treasury <span><input type="number" name="treasury" value="{{rebellion.treasury}}" {{readOnly}}> gp</span></label>
+    <label>Actions <span><input type="number" name="actionsRemaining" value="{{rebellion.actionsRemaining}}" {{readOnly}}> / <input type="number" name="actionsMaximum" value="{{rebellion.actionsMaximum}}" {{readOnly}}></span></label>
+    <label>Public Opinion <span><input type="number" name="publicOpinion" value="{{rebellion.publicOpinion}}" min="-3" max="3" {{readOnly}}> {{opinionLabel}}</span></label>
+  </section>
+
+  <section class="srr-stat-row">
+    <label><i class="fas fa-heart"></i> Loyalty<input type="number" name="loyalty" value="{{rebellion.loyalty}}" {{readOnly}}></label>
+    <label><i class="fas fa-mask"></i> Secrecy<input type="number" name="secrecy" value="{{rebellion.secrecy}}" {{readOnly}}></label>
+    <label><i class="fas fa-shield-halved"></i> Security<input type="number" name="security" value="{{rebellion.security}}" {{readOnly}}></label>
+    <label class="danger"><i class="fas fa-eye"></i> Notoriety<input type="number" name="notoriety" value="{{rebellion.notoriety}}" {{readOnly}}></label>
+    <label class="danger"><i class="fas fa-fire"></i> Danger<input type="number" name="danger" value="{{rebellion.danger}}" {{readOnly}}></label>
+  </section>
+
+  <nav class="srr-tabs tabs" data-group="primary">
+    <a class="item active" data-tab="overview">Overview</a><a class="item" data-tab="teams">Teams</a><a class="item" data-tab="missions">Missions</a><a class="item" data-tab="log">Log</a>
+  </nav>
+
+  <div class="srr-content">
+    <div class="tab active" data-group="primary" data-tab="overview">
+      <div class="srr-panel"><h2>Rebellion Notes</h2><textarea name="notes" {{readOnly}}>{{rebellion.notes}}</textarea></div>
+      <div class="srr-panel srr-event"><h2>Event Check</h2><label>Chance Roll<input type="number" name="eventChance" value="{{rebellion.eventChance}}" {{readOnly}}></label><label>Severity Roll<input type="number" name="eventSeverity" value="{{rebellion.eventSeverity}}" {{readOnly}}></label>{{#if editable}}<button type="button" data-action="roll-event"><i class="fas fa-dice-d100"></i> Roll Event</button>{{/if}}</div>
+    </div>
+    <div class="tab" data-group="primary" data-tab="teams">
+      {{#each rebellion.teams as |team i|}}<article class="srr-card team"><div class="card-head"><input name="team.{{i}}.name" value="{{team.name}}" {{../readOnly}}>{{#if ../editable}}<button type="button" data-action="remove-team" data-index="{{i}}"><i class="fas fa-trash"></i></button>{{/if}}</div><div class="card-fields"><label>Type<input name="team.{{i}}.type" value="{{team.type}}" {{../readOnly}}></label><label>Status<input name="team.{{i}}.status" value="{{team.status}}" {{../readOnly}}></label><label>Bonus<input type="number" name="team.{{i}}.bonus" value="{{team.bonus}}" {{../readOnly}}></label></div><textarea name="team.{{i}}.notes" placeholder="Team notes" {{../readOnly}}>{{team.notes}}</textarea></article>{{else}}<p class="empty">No teams have been recruited.</p>{{/each}}
+      {{#if editable}}<button type="button" data-action="add-team"><i class="fas fa-plus"></i> Add Team</button>{{/if}}
+    </div>
+    <div class="tab" data-group="primary" data-tab="missions">
+      {{#each rebellion.missions as |mission i|}}<article class="srr-card mission"><div class="card-head"><input name="mission.{{i}}.title" value="{{mission.title}}" {{../readOnly}}>{{#if ../editable}}<button type="button" data-action="remove-mission" data-index="{{i}}"><i class="fas fa-trash"></i></button>{{/if}}</div><div class="card-fields"><label>Advisor<input name="mission.{{i}}.advisor" value="{{mission.advisor}}" {{../readOnly}}></label><label>Primary Stat<select name="mission.{{i}}.stat" {{../readOnly}}><option {{#if (eq mission.stat "Loyalty")}}selected{{/if}}>Loyalty</option><option {{#if (eq mission.stat "Secrecy")}}selected{{/if}}>Secrecy</option><option {{#if (eq mission.stat "Security")}}selected{{/if}}>Security</option></select></label><label>Status<input name="mission.{{i}}.status" value="{{mission.status}}" {{../readOnly}}></label><label>Assigned Team<input name="mission.{{i}}.team" value="{{mission.team}}" {{../readOnly}}></label><label>Assigned PCs<input name="mission.{{i}}.pcs" value="{{mission.pcs}}" placeholder="Two PCs" {{../readOnly}}></label></div><textarea name="mission.{{i}}.details" placeholder="Decision details, risks, and results" {{../readOnly}}>{{mission.details}}</textarea></article>{{else}}<p class="empty">No missions are currently available.</p>{{/each}}
+      {{#if editable}}<button type="button" data-action="add-mission"><i class="fas fa-plus"></i> Add Mission</button>{{/if}}
+    </div>
+    <div class="tab" data-group="primary" data-tab="log"><div class="log-list">{{#each rebellion.log}}<p><time>{{this.time}}</time>{{this.text}}</p>{{else}}<p class="empty">No recorded changes.</p>{{/each}}</div>{{#if editable}}<button type="button" data-action="clear-log">Clear Log</button>{{/if}}</div>
+  </div>
+  {{#if editable}}<footer><button type="button" data-action="save"><i class="fas fa-floppy-disk"></i> Save Changes</button></footer>{{/if}}
+</form>

@@ -1,0 +1,17 @@
+{
+  "id": "silver-ravens-rebellion",
+  "title": "Silver Ravens Rebellion Sheet",
+  "description": "A shared, persistent rebellion management sheet for Hell's Rebels and other Pathfinder 1e campaigns.",
+  "version": "0.1.0",
+  "authors": [{ "name": "Steve Le" }],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "relationships": {
+    "systems": [{ "id": "pf1", "type": "system", "compatibility": { "minimum": "11" } }]
+  },
+  "esmodules": ["scripts/rebellion.js"],
+  "styles": ["styles/rebellion.css"],
+  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }]
+}
